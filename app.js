@@ -8,26 +8,27 @@ captureTime(app);
 app.use(function prkApp2(req, res, next) {
 	next();
 });
-
 app.use(router);
 
-
+app.get('/apptest', function(req, res, next) {
+	res.send('apptest');
+	next();
+});
 router.use(function prkRouter(req, res, next) {
-	console.log('ok');
-	console.log('okend');
+	console.log('prkRouter');
 	next();
 });
 
 router.use(function prkRouter1(req, res, next) {
-	console.log('ok1');
+	console.log('prkRouter1');
 	var a = "";
 	for(var i = 0; i< 100; i++) {
 		a = a + i;
 	}
-	console.log('end1');
 	next();
 });
 router.get('/test', function(req, res, next) {
 	res.send('test');
+	next();
 });
 app.listen(3000);
