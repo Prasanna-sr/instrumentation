@@ -3,12 +3,14 @@ var app = express();
 var router = express.Router();
 
 var captureTime = require('./captureTime');
-captureTime(app);
+captureTime(app); 
 
-app.use(router);
 app.use(function prkApp2(req, res, next) {
 	next();
 });
+
+app.use(router);
+
 
 router.use(function prkRouter(req, res, next) {
 	console.log('ok');
