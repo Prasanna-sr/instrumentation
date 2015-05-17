@@ -1,7 +1,7 @@
 var sinon = require('sinon');
 var assert = require('assert');
 var request = require('supertest');
-var captureTime = require('./../captureTime');
+var captureTime = require('./../index');
 
 var express = require('express');
 var app = express();
