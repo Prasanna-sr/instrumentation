@@ -38,12 +38,12 @@ module.exports = function(app) {
         return function() {
             var middlewareFn = arguments[1];
             var route = arguments[0];
-            arguments[1] = middlewareHandler(middlewareFn);
+            arguments[1] = middlewareHandler(middlewareFn, route);
             return routerFn.apply(this, arguments);
         }
     }
 
-    function middlewareHandler(middlewareFn) {
+    function middlewareHandler(middlewareFn, route) {
         return function() {
             var $obj = {};
             $obj["timerObj"] = {};
@@ -52,12 +52,11 @@ module.exports = function(app) {
             if (!arguments[0].timers) {
                 arguments[0].timers = [];
             }
-            console.log('router::start time' +
-                (middlewareFn.name || 'route:' + route));
+            //console.log('router::start time' + (middlewareFn.name || 'route:' + route));
+            
             var nextFn = arguments[2];
             arguments[2] = function() {
-                console.log('router::end time' +
-                    (middlewareFn.name || 'route:' + route));
+            //console.log('router::end time' + (middlewareFn.name || 'route:' + route));
 
                 if (middlewareFn.name) {
                     $obj["timerObj"][middlewareFn.name] = new Date().getTime() - $obj.counter;
@@ -71,7 +70,6 @@ module.exports = function(app) {
             return middlewareFn.apply(this, arguments);
         }
     }
-
 
     function overrideMethod(object, methodName, callback) {
         object[methodName] = callback(object[methodName]);
