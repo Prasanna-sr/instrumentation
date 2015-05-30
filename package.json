@@ -1,18 +1,17 @@
 {
-  "name": "express_response_time",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha test && exit 1"
-  },
-  "author": "Prasanna Ramanujam",
-  "license": "MIT",
-  "dependencies": {
-    "express": "^4.12.3"
-  },
-  "devDependencies": {
-    "sinon": "^1.14.1",
-    "supertest": "^1.0.1"
-  }
+    "name": "express_response_time",
+    "version": "0.0.1",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "mocha test && exit 1"
+    },
+    "author": "Prasanna Ramanujam",
+    "license": "MIT",
+    "dependencies": {},
+    "devDependencies": {
+        "express": "^4.12.3",
+        "sinon": "^1.14.1",
+        "supertest": "^1.0.1"
+    }
 }

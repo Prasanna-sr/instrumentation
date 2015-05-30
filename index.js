@@ -53,7 +53,6 @@ module.exports = function(app) {
                 arguments[0].timers = [];
             }
             //console.log('router::start time' + (middlewareFn.name || 'route:' + route));
-            
             var nextFn = arguments[2];
             arguments[2] = function() {
             //console.log('router::end time' + (middlewareFn.name || 'route:' + route));

@@ -20,7 +20,6 @@ app.get('/apptest', function(req, res, next) {
     next();
 });
 router.use(function prkRouter1(req, res, next) {
-    console.log('prkRouter');
     setTimeout(function() {
         next();
     }, 200);
@@ -28,7 +27,6 @@ router.use(function prkRouter1(req, res, next) {
 });
 
 router.use(function prkRouter2(req, res, next) {
-    console.log('prkRouter1');
     var a = '';
     for (var i = 0; i < 100; i++) {
         a = a + i;
