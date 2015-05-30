@@ -1,4 +1,8 @@
 module.exports = function(app) {
+    app.use(function(req, res, next) {
+        req.timers = [];
+        next();
+    });
     overrideMethod(app, 'use', appMiddleware);
     overrideMethod(app, 'get', routerHttpMethods);
     overrideMethod(app, 'post', routerHttpMethods);
@@ -57,13 +61,14 @@ module.exports = function(app) {
             arguments[2] = function() {
             //console.log('router::end time' + (middlewareFn.name || 'route:' + route));
 
-                if (middlewareFn.name) {
-                    $obj["timerObj"][middlewareFn.name] = new Date().getTime() - $obj.counter;
-                } else {
-                    $obj["timerObj"]["anonymous"] = new Date().getTime() - $obj.counter;
-                }
-                $obj.req.timers.push($obj["timerObj"]);
-                nextFn.apply(this, arguments);
+            if (middlewareFn.name || route) {
+                var name = middlewareFn.name || route;
+                $obj["timerObj"][name] = new Date().getTime() - $obj.counter;
+            } else {
+                $obj["timerObj"]["anonymous"] = new Date().getTime() - $obj.counter;
+            }
+            $obj.req.timers.push($obj["timerObj"]);
+            nextFn.apply(this, arguments);
 
             }
             return middlewareFn.apply(this, arguments);
