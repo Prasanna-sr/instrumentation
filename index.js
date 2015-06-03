@@ -48,30 +48,35 @@ module.exports = function(app) {
     }
 
     function middlewareHandler(middlewareFn, route) {
-        return function() {
-            var $obj = {};
-            $obj["timerObj"] = {};
-            $obj.req = arguments[0];
-            $obj.counter = new Date().getTime();
-            if (!arguments[0].timers) {
-                arguments[0].timers = [];
+        if (middlewareFn && middlewareFn.length === 4) {
+            return function(err, req, res, next) {
+                return middlewareFn.apply(this, arguments);
             }
-            //console.log('router::start time' + (middlewareFn.name || 'route:' + route));
-            var nextFn = arguments[2];
-            arguments[2] = function() {
-            //console.log('router::end time' + (middlewareFn.name || 'route:' + route));
+        } else {
+            return function() {
+                var $obj = {};
+                $obj["timerObj"] = {};
+                $obj.req = arguments[0];
+                $obj.counter = new Date().getTime();
+                if (!arguments[0].timers) {
+                    arguments[0].timers = [];
+                }
+                //console.log('router::start time' + (middlewareFn.name || 'route:' + route));
+                var nextFn = arguments[2];
+                arguments[2] = function() {
+                    //console.log('router::end time' + (middlewareFn.name || 'route:' + route));
 
-            if (middlewareFn.name || route) {
-                var name = middlewareFn.name || route;
-                $obj["timerObj"][name] = new Date().getTime() - $obj.counter;
-            } else {
-                $obj["timerObj"]["anonymous"] = new Date().getTime() - $obj.counter;
+                    if (middlewareFn.name || route) {
+                        var name = middlewareFn.name || route;
+                        $obj["timerObj"][name] = new Date().getTime() - $obj.counter;
+                    } else {
+                        $obj["timerObj"]["anonymous"] = new Date().getTime() - $obj.counter;
+                    }
+                    $obj.req.timers.push($obj["timerObj"]);
+                    nextFn.apply(this, arguments);
+                }
+                return middlewareFn.apply(this, arguments);
             }
-            $obj.req.timers.push($obj["timerObj"]);
-            nextFn.apply(this, arguments);
-
-            }
-            return middlewareFn.apply(this, arguments);
         }
     }
 
