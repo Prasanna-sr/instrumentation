@@ -14,6 +14,10 @@ var appRouter = function(req, res, next) {
     res.status(200).send('ok');
     next();
 };
+var errorHandler = function(err, req, res, next) {
+    res.status(500).send();
+};
+var spyErrorHandler = sinon.spy(errorHandler);
 var appSpyRouter = sinon.spy(appRouter);
 
 app.use(appMiddleware);
@@ -21,15 +25,30 @@ app.use(router);
 router.use(routerMiddleware);
 
 app.get('/test', appSpyRouter);
+app.get('/error', function(req, res, next) {
+    omg();
+    res.status(200).send('ok');
+});
+app.use(spyErrorHandler)
 
 describe('app middleware', function() {
     it('should be called', function(done) {
-        request(app).get('/test').expect(200).end(function() {
+        request(app).get('/test').expect(500).end(function() {
             assert.ok(appMiddleware.called);
             done();
         });
     });
 });
+
+describe.only('app error middleware', function() {
+    it('should be called', function(done) {
+        request(app).get('/error').expect(200).end(function() {
+            assert.ok(spyErrorHandler.called);
+            done();
+        });
+    });
+});
+
 describe('router middleware', function() {
     it('should be called', function(done) {
         request(app).get('/test').expect(200).end(function() {
