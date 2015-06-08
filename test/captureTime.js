@@ -40,7 +40,7 @@ describe('app middleware', function() {
     });
 });
 
-describe.only('app error middleware', function() {
+describe('app error middleware', function() {
     it('should be called', function(done) {
         request(app).get('/error').expect(200).end(function() {
             assert.ok(spyErrorHandler.called);
