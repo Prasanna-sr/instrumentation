@@ -8,11 +8,13 @@
   },
   "author": "Prasanna Ramanujam",
   "license": "MIT",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
+    "coveralls": "^2.11.2",
     "express": "^4.12.3",
+    "istanbul": "^0.3.14",
     "mocha": "^2.2.5",
+    "mocha-lcov-reporter": "0.0.2",
     "sinon": "^1.14.1",
     "supertest": "^1.0.1"
   }
