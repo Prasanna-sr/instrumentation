@@ -58,18 +58,14 @@ module.exports = function(app) {
                 $obj["timerObj"] = {};
                 $obj.req = arguments[0];
                 $obj.counter = new Date().getTime();
-                if (!arguments[0].timers) {
-                    arguments[0].timers = [];
-                }
                 var nextFn = arguments[2];
+                if (middlewareFn.name || route) {
+                    $obj.name = middlewareFn.name || route;
+                } else {
+                    $obj.name = 'anonymous';
+                }
                 arguments[2] = function() {
-
-                    if (middlewareFn.name || route) {
-                        var name = middlewareFn.name || route;
-                        $obj["timerObj"][name] = new Date().getTime() - $obj.counter;
-                    } else {
-                        $obj["timerObj"]["anonymous"] = new Date().getTime() - $obj.counter;
-                    }
+                    $obj["timerObj"][$obj.name] = new Date().getTime() - $obj.counter;
                     $obj.req.timers.push($obj["timerObj"]);
                     nextFn.apply(this, arguments);
                 }

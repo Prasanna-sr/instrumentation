@@ -8,6 +8,12 @@ captureTime(app);
 app.use(function prkApp1(req, res, next) {
     next();
 });
+app.use(function (req, res, next) {
+    setTimeout(function (){
+        next();
+    }, 111);
+    
+});
 
 app.get('/apptest', function(req, res, next) {
     res.send('apptest');

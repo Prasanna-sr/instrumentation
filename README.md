@@ -5,8 +5,7 @@
 Provides instrumentation for node.js applications.
 It helps to capture time taken for each middleware and routes.
 
-[![npm version](https://badge.fury.io/js/instrumentation.svg)](http://badge.fury.io/js/instrumentation)
-## Install
+## Install [![npm version](https://badge.fury.io/js/instrumentation.svg)](http://badge.fury.io/js/instrumentation)
 
 	$ npm install Instrumentation
 
@@ -27,7 +26,6 @@ The timers are made avaialble through req.timers. req.timers can be grabbed anyw
 		}, 250);
 	    
 	});
-
 	app.get('/apptest', function(req, res, next) {
 	    res.send('apptest');
 	    next();
@@ -35,7 +33,7 @@ The timers are made avaialble through req.timers. req.timers can be grabbed anyw
 	app.use(function prkApp2(req, res, next) {
 	    console.log(req.timers);
 	});
-
+	app.listen(3000);
 
 ## Tests
 	$ npm install
