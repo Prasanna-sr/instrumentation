@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha test && exit 1"
+    "test": "./node_modules/.bin/mocha test"
   },
   "author": "Prasanna Ramanujam",
   "license": "MIT",
