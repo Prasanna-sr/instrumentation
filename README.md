@@ -1,6 +1,6 @@
 ##Instrumentation
-
-node.js application specific library which helps to capture time taken for each middleware and routes.
+Provides instrumentation for node.js applications.
+It helps to capture time taken for each middleware and routes.
 
 ## Install
 
@@ -32,4 +32,3 @@ node.js application specific library which helps to capture time taken for each 
 ##License
 
 [The MIT License](http://opensource.org/licenses/MIT)
-
