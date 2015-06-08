@@ -6,6 +6,11 @@ It helps to capture time taken for each middleware and routes.
 
 	$ npm install Instrumentation
 
+##How to use
+Initialize your application by requiring the module and calling the constructor
+ with the application object.
+The timers are made avaialble through req.timers. req.timers can be grabbed anywhere and anytime during the request.
+
 ## Usage
 	var express = require('express');
 	var app = express();
@@ -13,7 +18,10 @@ It helps to capture time taken for each middleware and routes.
 	instrumentation(app);
 
 	app.use(function prkApp(req, res, next) {
-	    next();
+		setTimeout(function() {
+			next();
+		}, 250);
+	    
 	});
 
 	app.get('/apptest', function(req, res, next) {
