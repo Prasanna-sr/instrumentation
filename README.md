@@ -1,7 +1,11 @@
+[![Build Status](https://travis-ci.org/Prasanna-sr/instrumentation.svg?branch=master)](https://travis-ci.org/Prasanna-sr/instrumentation)
+[![Dependencies](https://david-dm.org/Prasanna-sr/instrumentation.svg)](https://david-dm.org/Prasanna-sr/instrumentation)
+
 ##Instrumentation
 Provides instrumentation for node.js applications.
 It helps to capture time taken for each middleware and routes.
 
+[![npm version](https://badge.fury.io/js/instrumentation.svg)](http://badge.fury.io/js/instrumentation)
 ## Install
 
 	$ npm install Instrumentation
