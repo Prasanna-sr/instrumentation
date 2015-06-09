@@ -3,8 +3,8 @@
 [![Dependencies](https://david-dm.org/Prasanna-sr/instrumentation.svg)](https://david-dm.org/Prasanna-sr/instrumentation)
 [![Coverage Status](https://coveralls.io/repos/Prasanna-sr/instrumentation/badge.svg?branch=master)](https://coveralls.io/r/Prasanna-sr/instrumentation?branch=master)
 
-##Instrumentation 
-Provides instrumentation for node.js applications.
+## Instrumentation 
+Provides instrumentation for connect middleware (express) specific node.js applications.
 It helps to capture time taken for each middleware and routes.
 
 
@@ -12,10 +12,10 @@ It helps to capture time taken for each middleware and routes.
 
 	$ npm install Instrumentation
 
-##How to use
+## How to use
 Initialize your application by requiring the module and calling the constructor
  with the application object.
-The timers are made avaialble through req.timers. req.timers can be grabbed anywhere and anytime during the request.
+The timers are made avaialble through req.timers. req.timers can be grabbed anywhere during the request.
 
 ## Usage
 	var express = require('express');
@@ -42,6 +42,6 @@ The timers are made avaialble through req.timers. req.timers can be grabbed anyw
 	$ npm install
 	$ npm test
 
-##License
+## License
 
 [The MIT License](http://opensource.org/licenses/MIT)
