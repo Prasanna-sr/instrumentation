@@ -1,21 +1,25 @@
 {
-  "name": "instrumentation",
-  "version": "0.0.2",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "./node_modules/.bin/mocha test"
-  },
-  "author": "Prasanna Ramanujam",
-  "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {
-    "coveralls": "^2.11.2",
-    "express": "^4.12.3",
-    "istanbul": "^0.3.14",
-    "mocha": "^2.2.5",
-    "mocha-lcov-reporter": "0.0.2",
-    "sinon": "^1.14.1",
-    "supertest": "^1.0.1"
-  }
+    "name": "instrumentation",
+    "version": "0.0.2",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "./node_modules/.bin/mocha test"
+    },
+    "author": "Prasanna Ramanujam",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/Prasanna-sr/instrumentation.git"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "coveralls": "^2.11.2",
+        "express": "^4.12.3",
+        "istanbul": "^0.3.14",
+        "mocha": "^2.2.5",
+        "mocha-lcov-reporter": "0.0.2",
+        "sinon": "^1.14.1",
+        "supertest": "^1.0.1"
+    }
 }
