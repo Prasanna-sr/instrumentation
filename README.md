@@ -38,6 +38,8 @@ The timers are made avaialble through req.timers. req.timers can be grabbed anyw
 	});
 	app.listen(3000);
 
+Examples are avaialbe here (https://github.com/Prasanna-sr/instrumentation/tree/master/examples)
+
 ## Tests
 	$ npm install
 	$ npm test
