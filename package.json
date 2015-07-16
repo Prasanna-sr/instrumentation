@@ -12,6 +12,7 @@
         "type": "git",
         "url": "git://github.com/Prasanna-sr/instrumentation.git"
     },
+    "keywords": ["production", "monitoring", "instrumentation", "logging"],
     "dependencies": {},
     "devDependencies": {
         "coveralls": "^2.11.2",
