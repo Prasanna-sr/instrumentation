@@ -4,7 +4,9 @@ var app = express();
 var router = express.Router();
 
 var captureTime = require('./../index.js');
-captureTime(app);
+captureTime(app, {}, function() {
+    console.log('got it');
+});
 
 app.use(function middleware1(req, res, next) {
     next();
@@ -15,8 +17,11 @@ app.use(function middleware2(req, res, next) {
     }, 111);
 });
 app.get('/apptest', function apptestRoute(req, res, next) {
-    res.send('apptest');
+    // res.send('app test');
+    // res.json('okokok');
+    res.sendFile('ok');
     next();
+
 });
 app.get('/apptest1', function(req, res, next) {
     res.send('apptest');
@@ -34,9 +39,9 @@ app.use(function timers(req, res, next) {
             }
         }
     });
-    if(log) {
+    if (log) {
         console.log(req.timers);
-        console.log(req.headers);
+        // console.log(req.headers);
     }
     next();
 });
@@ -44,7 +49,7 @@ app.use(function timers(req, res, next) {
 //Error handler
 app.use(function(err, req, res, next) {
     console.log(req.timers);
-    console.log(req.headers);
+    // console.log(req.headers);
 });
 
 

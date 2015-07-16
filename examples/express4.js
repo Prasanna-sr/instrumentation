@@ -4,7 +4,9 @@ var app = express();
 var router = express.Router();
 
 var captureTime = require('./../index.js');
-captureTime(app);
+captureTime(app, {}, function() {
+    console.log('ookay dookie');
+});
 
 app.use(function prkApp1(req, res, next) {
     next();
@@ -27,7 +29,7 @@ router.use(function prkRouter1(req, res, next) {
 
 router.get('/test', function test(req, res, next) {
     setTimeout(function() {
-        res.send('test');
+        res.status(200).send('test dfsd');
         next();
     }, 111);
 

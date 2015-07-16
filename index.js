@@ -1,8 +1,20 @@
-module.exports = function(app) {
+var expressSendMethods = ['send', 'json', 'jsonp', 'redirect', 'sendStatus', 'render', 'sendfile','sendFile'];
+
+module.exports = function(app, rulesObj, notifyCallback) {
+
     app.use(function(req, res, next) {
         req.timers = [];
+        overrideMethods(res, expressSendMethods, responseSend);
+
+        function responseSend(responseFn) {
+            return function() {
+                notifyCallback(req, res);
+                return responseFn.apply(this, arguments);
+            }
+        }
         next();
     });
+
     overrideMethod(app, 'use', appMiddleware);
     overrideMethod(app, 'get', routerHttpMethods);
     overrideMethod(app, 'post', routerHttpMethods);
@@ -74,7 +86,18 @@ module.exports = function(app) {
         }
     }
 
+
+
+    function overrideMethods(object, methodsArr, callback) {
+        methodsArr.forEach(function(method) {
+            object[method] = callback(object[method]);
+        });
+    }
+
     function overrideMethod(object, methodName, callback) {
         object[methodName] = callback(object[methodName]);
     }
+
+
+
 };
