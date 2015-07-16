@@ -3,8 +3,11 @@ var express = require('express');
 var app = express();
 var router = express.Router();
 
-var captureTime = require('./../index.js');
-captureTime(app, {}, function() {
+var instrumentation = require('./../index.js');
+instrumentation(app, {
+    rt: instrumentation.httpResponseTime(200)
+}, function(req, res) {
+    console.log(req.timers);
     console.log('ookay dookie');
 });
 
@@ -37,28 +40,28 @@ router.get('/test', function test(req, res, next) {
 
 
 //response time is avaialble in req.timers
-app.use(function timers(req, res, next) {
-    //Logs when any middleware or routes take more than 100 milliseconds
-    var log = 0;
-    req.timers.forEach(function(obj) {
-        for (var key in obj) {
-            if (obj[key] > 100) {
-                log = 1;
-            }
-        }
-    });
-    if(log) {
-        console.log(req.timers);
-        console.log(req.headers);
-    }
-    next();
-});
+// app.use(function timers(req, res, next) {
+//     //Logs when any middleware or routes take more than 100 milliseconds
+//     var log = 0;
+//     req.timers.forEach(function(obj) {
+//         for (var key in obj) {
+//             if (obj[key] > 100) {
+//                 log = 1;
+//             }
+//         }
+//     });
+//     if(log) {
+//         console.log(req.timers);
+//         console.log(req.headers);
+//     }
+//     next();
+// });
 
-app.use(function(err, req, res, next) {
-    console.log(err);
-    console.log(req.timers);
-    console.log(req.headers);
-});
+// app.use(function(err, req, res, next) {
+//     console.log(err);
+//     console.log(req.timers);
+//     console.log(req.headers);
+// });
 
 
 

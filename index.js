@@ -1,14 +1,31 @@
 var expressSendMethods = ['send', 'json', 'jsonp', 'redirect', 'sendStatus', 'render', 'sendfile','sendFile'];
+var httpResponseTime = require('./rules/httpResponseTime');
 
-module.exports = function(app, rulesObj, notifyCallback) {
+
+module.exports = instrument;
+instrument.httpResponseTime = httpResponseTime;
+
+function instrument(app, rulesObj, notifyCallback) {
 
     app.use(function(req, res, next) {
         req.timers = [];
+        var startTime = new Date().getTime();
         overrideMethods(res, expressSendMethods, responseSend);
 
         function responseSend(responseFn) {
             return function() {
-                notifyCallback(req, res);
+                req.timers.push({
+                    '$finalTimer': (new Date().getTime() - startTime)
+                });
+                var keys = Object.keys(rulesObj);
+                var shouldNotify = keys.some(function(key) {
+                    var fn = rulesObj[key];
+                    return fn(req, res);
+                });
+                if(shouldNotify) {
+                    notifyCallback(req, res);    
+                }
+                
                 return responseFn.apply(this, arguments);
             }
         }
@@ -100,4 +117,4 @@ module.exports = function(app, rulesObj, notifyCallback) {
 
 
 
-};
+}
