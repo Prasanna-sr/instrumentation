@@ -1,7 +1,6 @@
 var expressSendMethods = ['send', 'json', 'jsonp', 'redirect', 'sendStatus', 'render', 'sendfile','sendFile'];
 var httpResponseTime = require('./rules/httpResponseTime');
 
-
 module.exports = instrument;
 instrument.httpResponseTime = httpResponseTime;
 
@@ -103,8 +102,6 @@ function instrument(app, rulesObj, notifyCallback) {
         }
     }
 
-
-
     function overrideMethods(object, methodsArr, callback) {
         methodsArr.forEach(function(method) {
             object[method] = callback(object[method]);
@@ -114,7 +111,4 @@ function instrument(app, rulesObj, notifyCallback) {
     function overrideMethod(object, methodName, callback) {
         object[methodName] = callback(object[methodName]);
     }
-
-
-
 }
