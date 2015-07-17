@@ -11,7 +11,8 @@ Provides instrumentation for [express](http://expressjs.com/) or connect middlew
 It helps to capture time taken for each middleware and routes.
 
 ## Why
-If you run node.js application in production and wonder why certain request takes too long or why certain request fails. This module could help you to get information regarding running time for each middleware and routes which could help you troubleshoot the problem.
+When running in production, you may wish you could have certain data avaialble for certain request.
+It is not efficient to log all parameters for all requests. This library helps you to create application specific rules and provides all application data only when the application fails certain rules.
 
 
 ## Install [![npm version](https://badge.fury.io/js/instrumentation.svg)](http://badge.fury.io/js/instrumentation)
