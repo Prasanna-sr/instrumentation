@@ -4,12 +4,17 @@ var app = express();
 var router = express.Router();
 
 var instrumentation = require('./../index.js');
+
+
 instrumentation(app, {
-    rt: instrumentation.httpResponseTime(200)
+    responseTime: instrumentation.httpResponseTime(500)
 }, function(req, res) {
+    //log data here
+    console.log('notify callback called !');
+    console.log(req.headers);
     console.log(req.timers);
-    console.log('ookay dookie');
 });
+
 
 app.use(function prkApp1(req, res, next) {
     next();
@@ -25,10 +30,18 @@ app.use(router);
 
 router.use(function prkRouter1(req, res, next) {
     setTimeout(function() {
+        // customFn();
         next();
     }, 200);
 
 });
+
+// function customFn() {
+//     req.timer.startTime();
+//     //
+//     req.timer.EndTime();
+
+// }
 
 router.get('/test', function test(req, res, next) {
     setTimeout(function() {
