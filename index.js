@@ -1,8 +1,71 @@
-module.exports = function(app) {
+var expressSendMethods = ['send', 'json', 'jsonp', 'redirect', 'sendStatus', 'render', 'sendfile', 'sendFile', 'status'];
+var httpResponseTime = require('./rules/httpResponseTime');
+var httpResponseCode = require('./rules/httpResponseCode');
+
+module.exports = instrument;
+instrument.httpResponseTime = httpResponseTime;
+instrument.httpResponseCode = httpResponseCode;
+
+function instrument(app, rulesObj, notifyCallback) {
+
     app.use(function(req, res, next) {
-        req.timers = [];
+        req.timers = function() {};
+        req.timers.value = [];
+        var startTime = new Date().getTime();
+        req.timers.start = function(name) {
+            for (var i = req.timers.value.length - 1; i >= 0; i--) {
+                var tempObj = req.timers.value[i];
+                var key = Object.keys(tempObj)[0];
+                var value = tempObj[key];
+                if (value === -1) {
+                    key = key + ' -> ' + name;
+                    var timerObj = {};
+                    timerObj[key] = {};
+                    timerObj[key]['time'] = new Date().getTime();
+                    timerObj[key]['init'] = -1;
+                    req.timers.value.push(timerObj);
+                    break;
+                }
+            }
+        }
+
+        req.timers.stop = function() {
+            for (var i = req.timers.value.length - 1; i >= 0; i--) {
+                var tempObj = req.timers.value[i];
+                var key = Object.keys(tempObj)[0];
+                var value = tempObj[key]['init'];
+                if (value === -1) {
+                    var timerObj = {};
+                    timerObj[key] = new Date().getTime() - req.timers.value[i][key]['time'];
+                    req.timers.value[i] = timerObj;
+                    break;
+                }
+
+            }
+        }
+        overrideMethods(res, expressSendMethods, responseSend);
+
+        function responseSend(responseFn) {
+            return function() {
+            var args = Array.prototype.slice.call(arguments);
+                req.timers.value.push({
+                    '$finalTimer': (new Date().getTime() - startTime)
+                });
+                var keys = Object.keys(rulesObj);
+                var shouldNotify = keys.some(function(key) {
+                    var fn = rulesObj[key];
+                    return fn(req, res, args);
+                });
+                if (shouldNotify) {
+                    notifyCallback(req, res);
+                }
+
+                return responseFn.apply(this, arguments);
+            }
+        }
         next();
     });
+
     overrideMethod(app, 'use', appMiddleware);
     overrideMethod(app, 'get', routerHttpMethods);
     overrideMethod(app, 'post', routerHttpMethods);
@@ -64,9 +127,11 @@ module.exports = function(app) {
                 } else {
                     $obj.name = 'anonymous';
                 }
+                $obj["timerObj"][$obj.name] = -1;
+                $obj.req.timers.value.push($obj["timerObj"]);
                 arguments[2] = function() {
                     $obj["timerObj"][$obj.name] = new Date().getTime() - $obj.counter;
-                    $obj.req.timers.push($obj["timerObj"]);
+                    $obj.req.timers.value.push($obj["timerObj"]);
                     nextFn.apply(this, arguments);
                 }
                 return middlewareFn.apply(this, arguments);
@@ -74,7 +139,13 @@ module.exports = function(app) {
         }
     }
 
+    function overrideMethods(object, methodsArr, callback) {
+        methodsArr.forEach(function(method) {
+            object[method] = callback(object[method]);
+        });
+    }
+
     function overrideMethod(object, methodName, callback) {
         object[methodName] = callback(object[methodName]);
     }
-};
+}
