@@ -1,8 +1,10 @@
-var expressSendMethods = ['send', 'json', 'jsonp', 'redirect', 'sendStatus', 'render', 'sendfile', 'sendFile'];
+var expressSendMethods = ['send', 'json', 'jsonp', 'redirect', 'sendStatus', 'render', 'sendfile', 'sendFile', 'status'];
 var httpResponseTime = require('./rules/httpResponseTime');
+var httpResponseCode = require('./rules/httpResponseCode');
 
 module.exports = instrument;
 instrument.httpResponseTime = httpResponseTime;
+instrument.httpResponseCode = httpResponseCode;
 
 function instrument(app, rulesObj, notifyCallback) {
 
@@ -45,13 +47,14 @@ function instrument(app, rulesObj, notifyCallback) {
 
         function responseSend(responseFn) {
             return function() {
+            var args = Array.prototype.slice.call(arguments);
                 req.timers.value.push({
                     '$finalTimer': (new Date().getTime() - startTime)
                 });
                 var keys = Object.keys(rulesObj);
                 var shouldNotify = keys.some(function(key) {
                     var fn = rulesObj[key];
-                    return fn(req, res);
+                    return fn(req, res, args);
                 });
                 if (shouldNotify) {
                     notifyCallback(req, arguments);

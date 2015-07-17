@@ -9,6 +9,7 @@ var instrumentation = require('./../index.js');
 instrumentation(app, {
     responseTime: instrumentation.httpResponseTime(500),
     treeId: ruleTreeId,
+    responseCode400s: instrumentation.httpResponseCode([404])
 }, function(req, res) {
     //log data here
     logData(req, res);
@@ -98,6 +99,13 @@ router.get('/test', function test(req, res, next) {
     privateFunction1(req);
     res.status(200).send('Test Page');
     next();
+});
+
+router.get('/test/httpResponse', function test(req, res, next) {
+    setTimeout(function() {
+        res.status(404).send('404 Page');
+        next();
+    }, 0);
 });
 
 
