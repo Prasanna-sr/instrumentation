@@ -47,12 +47,8 @@ function instrument(app, rulesObj, notifyCallback) {
 
         function responseSend(responseFn) {
             return function() {
-<<<<<<< HEAD
             var args = Array.prototype.slice.call(arguments);
-                req.timers.push({
-=======
                 req.timers.value.push({
->>>>>>> 33db9da4a7508583c72f4c989663d30487bc0916
                     '$finalTimer': (new Date().getTime() - startTime)
                 });
                 var keys = Object.keys(rulesObj);
@@ -60,12 +56,7 @@ function instrument(app, rulesObj, notifyCallback) {
                     var fn = rulesObj[key];
                     return fn(req, res, args);
                 });
-<<<<<<< HEAD
-
-                if(shouldNotify) {
-=======
                 if (shouldNotify) {
->>>>>>> 33db9da4a7508583c72f4c989663d30487bc0916
                     notifyCallback(req, res);
                 }
 
