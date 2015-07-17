@@ -5,7 +5,7 @@ var captureTime = require('./../index');
 
 var express = require('express');
 var app = express();
-captureTime(app);
+captureTime(app, {}, function(){});
 
 var router = express.Router();
 var appMiddleware = sinon.stub().callsArg(2);
