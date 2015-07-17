@@ -54,7 +54,7 @@ function instrument(app, rulesObj, notifyCallback) {
                     return fn(req, res);
                 });
                 if (shouldNotify) {
-                    notifyCallback(req, res);
+                    notifyCallback(req, arguments);
                 }
 
                 return responseFn.apply(this, arguments);

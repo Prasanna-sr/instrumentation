@@ -7,14 +7,37 @@ var instrumentation = require('./../index.js');
 
 
 instrumentation(app, {
-    responseTime: instrumentation.httpResponseTime(200)
+    responseTime: instrumentation.httpResponseTime(500),
+    treeId: ruleTreeId,
 }, function(req, res) {
     //log data here
     logData(req, res);
 });
 
+
+function ruleTreeId(req, res) {
+    var params = req.url.split('?');
+    var flag = 0;
+    // console.log(params);
+    params.forEach(function(item) {
+        if (item.indexOf('=') !== -1) {
+            var query = item.split('=');
+            if (query[0].indexOf('treeid') !== -1) {
+                if (Number(query[1]) < 1) {
+                    flag = 1;
+                }
+            }
+        }
+
+    });
+    if (flag === 1) {
+        return true;
+    }
+
+    //return true;
+}
+
 function logData(req, res) {
-    console.log('notify callback called !');
     console.log('/***********************************************************/');
     console.log('/********************** REQUEST HEADERS *********************/');
     console.log('/************************************************************/');
@@ -34,6 +57,7 @@ app.use(function prkApp1(req, res, next) {
 
 app.use(function prkApp2(req, res, next) {
     setTimeout(function() {
+        middlewarePrivateFunction(req);
         next();
     }, 111);
 
@@ -42,26 +66,38 @@ app.use(router);
 
 router.use(function prkRouter1(req, res, next) {
     setTimeout(function() {
-        // customFn();
         next();
     }, 200);
 
 });
 
-function customFunction(req, cb) {
-    req.timers.start('customFunctioN');
 
-    setTimeout(function() {
-        req.timers.stop();
-        cb();
-    }, 500);
+function middlewarePrivateFunction(req, cb) {
+    req.timers.start('mdPrivateFunction');
+    req.timers.stop();
+}
+
+function privateFunction(req, cb) {
+    req.timers.start('privateFunction');
+    var t = new Date().getTime();
+
+    for (var i = 0; i < 10000000; i++) {
+        var a = i++;
+    }
+    req.timers.stop();
+}
+
+
+function privateFunction1(req, cb) {
+    req.timers.start('privateFunction1');
+    req.timers.stop();
 }
 
 router.get('/test', function test(req, res, next) {
-        customFunction(req, function() {
-            res.status(200).send('test dfsd');
-        next();    
-        });
+    privateFunction(req);
+    privateFunction1(req);
+    res.status(200).send('Test Page');
+    next();
 });
 
 
