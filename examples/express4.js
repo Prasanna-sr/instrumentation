@@ -11,21 +11,33 @@ instrumentation(app, {
     responseCode400s: instrumentation.httpResponseCode([404])
 }, function(req, res) {
     //log data here
-    console.log('******* notify callback called ! *******');
-    console.log(req.headers);
-    console.log(req.timers);
+    logData(req, res);
 });
 
+function logData(req, res) {
+    console.log('notify callback called !');
+    console.log('/***********************************************************/');
+    console.log('/********************** REQUEST HEADERS *********************/');
+    console.log('/************************************************************/');
+    console.log(req.headers);
+    console.log('URL route :' + req.originalUrl);
+    console.log('\n');
+    console.log('/***************************************************************/');
+    console.log('/********************* MIDDLEWARE TIMERS ***********************/');
+    console.log('/***************************************************************/');
+    console.log(req.timers.value);
+
+}
 
 app.use(function prkApp1(req, res, next) {
     next();
 });
 
 app.use(function prkApp2(req, res, next) {
-    setTimeout(function (){
+    setTimeout(function() {
         next();
     }, 111);
-    
+
 });
 app.use(router);
 
@@ -37,19 +49,20 @@ router.use(function prkRouter1(req, res, next) {
 
 });
 
-// function customFn() {
-//     req.timer.startTime();
-//     //
-//     req.timer.EndTime();
+function customFunction(req, cb) {
+    req.timers.start('customFunctioN');
 
-// }
+    setTimeout(function() {
+        req.timers.stop();
+        cb();
+    }, 500);
+}
 
 router.get('/test', function test(req, res, next) {
-    setTimeout(function() {
-        res.status(200).send('test dfsd');
-        next();
-    }, 111);
-
+        customFunction(req, function() {
+            res.status(200).send('test dfsd');
+        next();    
+        });
 });
 
 router.get('/test/httpResponse', function test(req, res, next) {
