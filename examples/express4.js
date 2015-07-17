@@ -7,10 +7,11 @@ var instrumentation = require('./../index.js');
 
 
 instrumentation(app, {
-    responseTime: instrumentation.httpResponseTime(500)
+    responseTime: instrumentation.httpResponseTime(500),
+    responseCode400s: instrumentation.httpResponseCode([404])
 }, function(req, res) {
     //log data here
-    console.log('notify callback called !');
+    console.log('******* notify callback called ! *******');
     console.log(req.headers);
     console.log(req.timers);
 });
@@ -49,6 +50,13 @@ router.get('/test', function test(req, res, next) {
         next();
     }, 111);
 
+});
+
+router.get('/test/httpResponse', function test(req, res, next) {
+    setTimeout(function() {
+        res.status(404).send('404 Page');
+        next();
+    }, 0);
 });
 
 
